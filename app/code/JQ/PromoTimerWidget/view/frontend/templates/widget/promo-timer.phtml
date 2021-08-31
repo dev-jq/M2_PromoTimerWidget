@@ -1,0 +1,95 @@
+<?php
+/** \JQ\PromoTimerWidget\Block\Widget\Timer $block */
+?>
+
+<?php
+	$date = $block->getData('date');
+	$endDate = explode(" ", $date)[0];
+	$endTime = explode(" ", $date)[1];
+	$promoTitle = $block->getData('title') ? $block->getData('title') : __('There is still time to start the promotion');
+	$promoLink = $block->getData('link') ? $block->escapeHtml($block->getData('link')) : null;
+	$button = $block->getData('button') ? $block->escapeHtml($block->getData('button')) : __('Check out');
+	$promoBackground = $block->getData('background') ? $block->escapeHtml($block->getData('background')) : null;
+	$promoTextColor = $block->getData('text') ? $block->escapeHtml($block->getData('text')) : null;
+	$styleAttr = '';
+	
+	if ($promoBackground || $promoTextColor) {
+		$styleAttr = ' style="';
+		if ($promoBackground) {
+			$styleAttr .= "background-color:" .$promoBackground. ";";
+		}
+		if($promoTextColor) {
+			$styleAttr .= "color:" .$promoTextColor. ";";
+		}
+		$styleAttr .= '"';
+	}
+?>
+<div class="widget promo-timer"<?= $styleAttr ?>>
+		<div id="promo-clock">
+			<div class="timer-content">
+				<span><?= $promoTitle ?>:</span>
+				<span class="days big"></span>
+			    <span class="smalltext days-text"><?= __('days'); ?></span>
+			    <span class="hours big"></span>
+			    <span class="smalltext hours-text"><?= __('hours'); ?></span>
+			    <span class="minutes big"></span>
+			    <span class="smalltext minutes-text"><?= __('minutes'); ?></span>
+			    <span class="seconds big"></span>
+			    <span class="smalltext seconds-text"><?= __('seconds'); ?></span>
+			</div>
+			<?php if($promoLink): ?>
+				<div class="link">
+					<a href="<?= $promoLink ?>" class="action primary button" title="<?= $button ?>"><span><?= $button ?></span></a>
+				</div>
+			<?php endif; ?>
+		</div>
+</div>
+
+<script>
+	function getTimeRemaining(endtime) {
+	  const total = Date.parse(endtime) - Date.parse(new Date());
+	  const seconds = Math.floor((total / 1000) % 60);
+	  const minutes = Math.floor((total / 1000 / 60) % 60);
+	  const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+	  const days = Math.floor(total / (1000 * 60 * 60 * 24));
+	  
+	  return {
+	    total,
+	    days,
+	    hours,
+	    minutes,
+	    seconds
+	  };
+	}
+
+	function initializeClock(id, endtime) {
+	  const clock = document.getElementById(id);
+	  const daysSpan = clock.querySelector('.days');
+	  const hoursSpan = clock.querySelector('.hours');
+	  const minutesSpan = clock.querySelector('.minutes');
+	  const secondsSpan = clock.querySelector('.seconds');
+
+	  function updateClock() {
+	    const t = getTimeRemaining(endtime);
+
+	    daysSpan.innerHTML = t.days;
+	    hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+	    minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+	    secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+	    if (t.total <= 0) {
+	      clearInterval(timeinterval);
+	    }
+	  }
+
+	  updateClock();
+	  const timeinterval = setInterval(updateClock, 1000);
+	}
+</script>
+
+<script>
+	var endDate = "<?= $endDate; ?>".split("/");
+	var endTime = "<?= $endTime; ?>".split(":");
+	var deadline = new Date(endDate[2], endDate[1] - 1, endDate[0], endTime[0], endTime[1], endTime[2]);
+	initializeClock('promo-clock', deadline);
+</script>

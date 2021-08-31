@@ -1,0 +1,34 @@
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget class="JQ\PromoTimerWidget\Block\Widget\Timer" id="jq_timer_widget">
+        <label>Promo countdown Timer</label>
+        <description>Displays a countdown timer until the start/end of the promotion</description>
+        <parameters>
+            <parameter name="title" xsi:type="text" required="false" visible="true" sort_order="1">
+                <label translate="true">Title</label>
+                <description>Default: There is still time to start the promotion</description>
+            </parameter>
+            <parameter name="date" xsi:type="block" required="true" visible="true" sort_order="2">
+                <label translate="true">End date</label>
+                <block class="JQ\PromoTimerWidget\Block\Widget\Type\DatePicker">
+                </block>
+            </parameter>
+            <parameter name="link" xsi:type="text" required="false" visible="true" sort_order="3">
+                <label translate="true">Promo URL</label>
+                <description>/example.html</description>
+            </parameter>
+            <parameter name="button" xsi:type="text" required="false" visible="true" sort_order="4">
+                <label translate="true">Button text</label>
+                <description>Default: Check out</description>
+            </parameter>
+            <parameter name="background" xsi:type="text" required="false" visible="true" sort_order="5">
+                <label translate="true">Background color</label>
+                <description>#Hex / rgba() / color</description>
+            </parameter>
+            <parameter name="text" xsi:type="text" required="false" visible="true" sort_order="6">
+                <label translate="true">Text color</label>
+                <description>#Hex / rgba() / color</description>
+            </parameter> 
+        </parameters>
+    </widget>
+</widgets>
